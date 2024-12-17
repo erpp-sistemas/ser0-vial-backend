@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model access {
+  access_id Int    @id(map: "PK__access__10FA1E20BA01929C") @default(autoincrement())
+  username  String @db.VarChar(100)
+  password  String @db.VarChar(255)
+  user_id   Int?
+  active    Int?   @default(1, map: "DF__access__active__6754599E") @db.SmallInt
+  user      user?  @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__access__user_id__72C60C4A")
+}
+
+model attendance {
+  attendance_id            Int       @id(map: "PK__attendan__20D6A9681D236F4A") @default(autoincrement())
+  user_id                  Int?
+  entry_time               DateTime? @db.DateTime
+  latitude_entry_time      Decimal?  @default(0, map: "DF__attendanc__latit__5629CD9C") @db.Decimal(19, 6)
+  longitude_entry_time     Decimal?  @default(0, map: "DF__attendanc__longi__571DF1D5") @db.Decimal(19, 6)
+  photo_entry_time         String?   @db.VarChar(255)
+  departure_time           DateTime? @db.DateTime
+  latitude_departure_time  Decimal?  @default(0, map: "DF__attendanc__latit__5812160E") @db.Decimal(19, 6)
+  longitude_departure_time Decimal?  @default(0, map: "DF__attendanc__longi__59063A47") @db.Decimal(19, 6)
+  photo_departure_time     String?   @db.VarChar(255)
+  user                     user?     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__attendanc__user___6EF57B66")
+}
+
+model field {
+  field_id        Int          @id(map: "PK__field__1BB6F43EE69412B7") @default(autoincrement())
+  name            String?      @db.VarChar(100)
+  type_db         String?      @db.VarChar(100)
+  type_field_form String?      @db.VarChar(100)
+  type_form       String?      @db.VarChar(100)
+  options_select  String?      @db.VarChar(100)
+  mandatory       Int?         @default(0, map: "DF__field__mandatory__619B8048")
+  type_select     String?      @db.VarChar(100)
+  parent_field_id Int?
+  order           Int?
+  form_field      form_field[]
+}
+
+model form {
+  form_id         Int               @id(map: "PK__form__190E16C90726D62B") @default(autoincrement())
+  name            String            @db.VarChar(100)
+  route_app_movil String?           @db.VarChar(100)
+  icono_app_movil String?           @db.VarChar(100)
+  have_signature  Int?              @default(0, map: "DF__form__have_signa__5EBF139D") @db.SmallInt
+  form_field      form_field[]
+  form_photo_form form_photo_form[]
+}
+
+model form_field {
+  id        Int       @id(map: "PK__form_fie__3213E83F7E232475") @default(autoincrement())
+  form_id   Int?
+  field_id  Int?
+  joined_at DateTime? @default(dbgenerated(), map: "DF__form_fiel__joine__6477ECF3") @db.DateTime
+  field     field?    @relation(fields: [field_id], references: [field_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__form_fiel__field__71D1E811")
+  form      form?     @relation(fields: [form_id], references: [form_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__form_fiel__form___70DDC3D8")
+}
+
+model form_photo_form {
+  id            Int         @id(map: "PK__form_pho__3213E83FECB64A52") @default(autoincrement())
+  form_id       Int?
+  photo_form_id Int?
+  form          form?       @relation(fields: [form_id], references: [form_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__form_phot__form___73BA3083")
+  photo_form    photo_form? @relation(fields: [photo_form_id], references: [photo_form_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__form_phot__photo__74AE54BC")
+}
+
+model photo_form {
+  photo_form_id   Int               @id(map: "PK__photo_fo__719E0D6947C82936") @default(autoincrement())
+  name            String?           @db.VarChar(100)
+  form_photo_form form_photo_form[]
+}
+
+model place {
+  place_id              Int                     @id(map: "PK__place__BF2B684A21206436") @default(autoincrement())
+  name                  String?                 @db.VarChar(100)
+  logo                  String?                 @db.VarChar(255)
+  latitude              Decimal?                @db.Decimal(19, 6)
+  longitude             Decimal?                @db.Decimal(19, 6)
+  active                Int?                    @default(1, map: "DF__place__active__47DBAE45") @db.SmallInt
+  place_user            place_user[]
+  register_form_dynamic register_form_dynamic[]
+}
+
+model place_user {
+  id        Int       @id(map: "PK__place_us__3213E83F593454BF") @default(autoincrement())
+  user_id   Int?
+  place_id  Int?
+  joined_at DateTime? @default(now(), map: "DF__place_use__joine__534D60F1") @db.DateTime
+  place     place?    @relation(fields: [place_id], references: [place_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__place_use__place__6E01572D")
+  user      user?     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__place_use__user___6D0D32F4")
+
+  @@unique([user_id, place_id], map: "place_user_index_0")
+}
+
+model register_form_dynamic {
+  id                Int       @id(map: "PK__register__3213E83FF9413999") @default(autoincrement())
+  place_id          Int?
+  data_json         String?   @db.VarChar(Max)
+  registration_date DateTime? @default(now(), map: "DF__register___regis__5BE2A6F2") @db.DateTime
+  place             place?    @relation(fields: [place_id], references: [place_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__register___place__6FE99F9F")
+}
+
+model role {
+  role_id    Int       @id(map: "PK__role__760965CC5665C99B") @default(autoincrement())
+  name       String?   @db.VarChar(100)
+  active     Int?      @default(1, map: "DF__role__active__4AB81AF0")
+  created_at DateTime? @default(now(), map: "DF__role__created_at__4BAC3F29") @db.DateTime
+  user       user[]
+}
+
+model user {
+  user_id          Int            @id(map: "PK__user__B9BE370F0F90DD8E") @default(autoincrement())
+  first_name       String         @db.VarChar(100)
+  middle_name      String?        @db.VarChar(100)
+  maternal_surname String?        @db.VarChar(100)
+  paternal_surname String         @db.VarChar(100)
+  birthdate        DateTime?      @db.Date
+  photo_url        String?        @db.VarChar(255)
+  entry_date       DateTime?      @db.Date
+  low_date         DateTime?      @db.Date
+  active           Int?           @default(1, map: "DF__user__active__4E88ABD4") @db.SmallInt
+  access_web       Int?           @default(1, map: "DF__user__access_web__4F7CD00D") @db.SmallInt
+  access_movil     Int?           @default(1, map: "DF__user__access_mov__5070F446") @db.SmallInt
+  role_id          Int?
+  access           access[]
+  attendance       attendance[]
+  place_user       place_user[]
+  role             role?          @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__user__role_id__6C190EBB")
+  user_contact     user_contact[]
+}
+
+model user_contact {
+  id              Int     @id(map: "PK__user_con__3213E83F19C1A5EC") @default(autoincrement())
+  street          String? @db.VarChar(100)
+  outer_number    String? @db.VarChar(10)
+  interior_number String? @db.VarChar(10)
+  cologne         String? @db.VarChar(100)
+  municipality    String? @db.VarChar(100)
+  cp              Int?
+  phone_number    String? @db.VarChar(20)
+  email           String? @db.VarChar(100)
+  user_id         Int?
+  user            user?   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__user_cont__user___7A672E12")
+}
