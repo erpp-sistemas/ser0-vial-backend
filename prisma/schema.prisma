@@ -134,6 +134,7 @@ model user {
   place_user       place_user[]
   role             role?          @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__user__role_id__6C190EBB")
   user_contact     user_contact[]
+  theme_color String         @db.VarChar(7)
 }
 
 model user_contact {

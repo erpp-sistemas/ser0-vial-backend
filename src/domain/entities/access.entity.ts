@@ -17,6 +17,7 @@ export class AccessEntity {
     public access_web: boolean, 
     public access_movil: boolean, 
     public role_id: number,
+    public theme_color: string,
     public user_id?: number,
     public active?: number,
     
@@ -26,13 +27,13 @@ export class AccessEntity {
    * Método estático para crear una instancia de LoginEntity desde un objeto genérico
    */
   static fromObject(object: { [key: string]: any }): AccessEntity {
-    const { access_id, username, password, token, first_name,	middle_name, paternal_surname, maternal_surname, birthdate,	photo_url, entry_date, low_date, access_web, access_movil, role_id, user_id, active } = object;
+    const { access_id, username, password, token, first_name,	middle_name, paternal_surname, maternal_surname, birthdate,	photo_url, entry_date, low_date, access_web, access_movil, role_id, theme_color, user_id, active } = object;
 
     // Validaciones
     if (!username) throw CustomError.badRequest("Missing username");
     //if (!password) throw CustomError.badRequest("Missingg password");
 
-    return new AccessEntity(access_id, username, password, token, first_name,	middle_name, paternal_surname, maternal_surname, birthdate,	photo_url, entry_date, low_date, access_web, access_movil, role_id, user_id, active);
+    return new AccessEntity(access_id, username, password, token, first_name,	middle_name, paternal_surname, maternal_surname, birthdate,	photo_url, entry_date, low_date, access_web, access_movil, role_id, theme_color, user_id, active);
   }
 
   /**
