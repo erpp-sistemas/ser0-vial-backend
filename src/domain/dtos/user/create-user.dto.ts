@@ -30,9 +30,7 @@ export class CreateUserDto {
         if(!paternal_surname) return ['Missing paternal surname'];
         if(!maternal_surname) return ['Missing maternal_surname'];
         if(!birthdate) return ['Missing birthdate'];
-        if(!photo_url) return ['Missing photo_url'];
-        if(!access_web) return ['Missing access_web'];
-        if(!access_movil) return ['Missing access_movil'];
+        if(!photo_url) return ['Missing photo_url'];        
         if(!role_id) return ['Missing role_id'];
         
         const fecha_date = new Date();
