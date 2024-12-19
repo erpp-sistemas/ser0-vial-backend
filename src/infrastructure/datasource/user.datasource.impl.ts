@@ -2,10 +2,16 @@ import { prisma } from "../../data/sqlserver";
 import { CreateUserDto, CustomError } from "../../domain";
 import { UserDatasource } from "../../domain/datasources/user.datasource";
 import { UserEntity } from "../../domain/entities/user.entity";
-//import { auth, db } from '../../firebase';
+import { Encrypt } from '../../config/encrypt.adapter';
+import { FirebaseService } from "../../presentation/services/firebase.service";
+
 
 
 export class UserDatasourceImpl extends UserDatasource {
+
+    constructor(
+        private firebaseService: FirebaseService
+    ) { super() }
 
     async getAll(): Promise<UserEntity[]> {
 
@@ -76,12 +82,39 @@ export class UserDatasourceImpl extends UserDatasource {
 
     async create(user: CreateUserDto): Promise<UserEntity> {
         try {
-            
-            const new_user = await prisma.user.create({
-                data: user
-            })
-            //todo crear el usuario en firebase
-            
+            let { username, password, ...rest } = user;
+
+            const user_find = await prisma.access.findFirst({ where: { username: username } });
+            if (user_find) throw CustomError.badRequest('Email already exists');
+
+            const password_encrypt = Encrypt.hash(password);
+
+            const new_user = await prisma.user.create({ data: rest });
+            await prisma.access.create({
+                data: {
+                    username,
+                    password: password_encrypt,
+                    user_id: new_user.user_id,
+                    active: 1
+                }
+            });
+            if (new_user.access_movil) {
+                const firebase_user = await this.firebaseService.createUser(username, password);
+                const uid = firebase_user.uid;
+                await this.firebaseService.createUserDocFirestore(uid, {
+                    email: username,
+                    IMEI: uid,
+                    isActive: true,
+                    lastSession: '',
+                    lastSync: '',
+                    name: `${new_user.first_name} ${new_user.middle_name} ${new_user.paternal_surname} ${new_user.maternal_surname}`,
+                    password: password,
+                    totalAccounts: 0,
+                    uid: uid,
+                    user_id: new_user.user_id
+                })
+            }
+
             return UserEntity.fromObject(new_user)
         } catch (error) {
             console.error(error)
@@ -112,13 +145,17 @@ export class UserDatasourceImpl extends UserDatasource {
                 data: { active: 0 }
             })
 
-            //todo cambiar a false el campo isActive del firebase
+            await this.firebaseService.updateUserDocById(user_id, { isActive: false });
+
             return UserEntity.fromObject(user_desactivated);
         } catch (error) {
             console.error(error)
             throw CustomError.internalServer('Internal server error')
         }
     }
+
+
+
 
 
 }
