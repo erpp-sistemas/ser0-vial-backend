@@ -102,6 +102,19 @@ export class UserDatasourceImpl extends UserDatasource {
             console.error(error)
             throw CustomError.internalServer('Internal server error')
         }
+    }   
+
+    async updateThemeColorByUserId(user_id: number, theme_color: string): Promise<string> {
+        try {
+            await prisma.user.update({
+                where: { user_id: user_id },
+                data: { theme_color: theme_color },
+            });
+            return 'Update changes in notifications_web success'
+        } catch (error) {
+            console.error(error);
+            throw CustomError.internalServer('Internal server error');
+        }
     }
 
 

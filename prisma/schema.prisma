@@ -129,12 +129,13 @@ model user {
   access_web       Int?           @default(1, map: "DF__user__access_web__4F7CD00D") @db.SmallInt
   access_movil     Int?           @default(1, map: "DF__user__access_mov__5070F446") @db.SmallInt
   role_id          Int?
+  theme_color      String?        @db.VarChar(7)
   access           access[]
   attendance       attendance[]
   place_user       place_user[]
   role             role?          @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__user__role_id__6C190EBB")
   user_contact     user_contact[]
-  theme_color String         @db.VarChar(7)
+  
 }
 
 model user_contact {

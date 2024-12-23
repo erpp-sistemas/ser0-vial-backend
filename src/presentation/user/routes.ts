@@ -23,6 +23,7 @@ export class UserRoutes {
         router.post('/create', controller.createUser)
         router.delete('/delete-by-id', controller.deleteUser)
         router.put('/update-by-id', controller.updateUser)
+        router.put('/update-theme-color-by-user-id', controller.updateThemeColorByUserId)
 
         return router;
 
