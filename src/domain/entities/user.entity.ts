@@ -3,6 +3,7 @@
 export class UserEntity {
 
     constructor(
+        public user_id: number,
         public first_name: string,
         public middle_name: string,
         public paternal_surname: string,
@@ -14,14 +15,14 @@ export class UserEntity {
         public active: number,
         public access_web: number,
         public access_movil: number,
-        public role_id: number,
+        public role: any,
         public place_user: any[]
     ){}
 
     static fromObject( object: {[key: string]: any} ): UserEntity {
 
-        const { first_name, middle_name, paternal_surname, maternal_surname, birthdate, photo_url, entry_date, low_date, active, access_web, access_movil, role_id, place_user } = object;
-        return new UserEntity(first_name, middle_name, paternal_surname, maternal_surname, birthdate, photo_url, entry_date, low_date, active, access_web, access_movil, role_id, place_user)
+        const { user_id, first_name, middle_name, paternal_surname, maternal_surname, birthdate, photo_url, entry_date, low_date, active, access_web, access_movil, role, place_user } = object;
+        return new UserEntity(user_id, first_name, middle_name, paternal_surname, maternal_surname, birthdate, photo_url, entry_date, low_date, active, access_web, access_movil, role, place_user)
 
     }
 
