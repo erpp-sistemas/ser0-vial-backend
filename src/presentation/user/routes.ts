@@ -2,6 +2,7 @@ import { Router } from "express";
 import { UserDatasourceImpl } from "../../infrastructure/datasource/user.datasource.impl";
 import { UserRepositoryImpl } from "../../infrastructure/repositories/user.repository.impl";
 import { UserController } from "./controller";
+import { FirebaseService } from "../services/firebase.service";
 
 
 
@@ -11,7 +12,8 @@ export class UserRoutes {
 
         const router = Router();
 
-        const datasource = new UserDatasourceImpl();
+        const firebase_service = new FirebaseService();
+        const datasource = new UserDatasourceImpl(firebase_service);
         const repository = new UserRepositoryImpl(datasource);
         const controller = new UserController(repository);
 
