@@ -16,13 +16,13 @@ export class UserEntity {
         public access_web: number,
         public access_movil: number,
         public role: any,
+        public theme_color: string,
         public place_user: any[]
     ){}
 
     static fromObject( object: {[key: string]: any} ): UserEntity {
-
-        const { user_id, first_name, middle_name, paternal_surname, maternal_surname, birthdate, photo_url, entry_date, low_date, active, access_web, access_movil, role, place_user } = object;
-        return new UserEntity(user_id, first_name, middle_name, paternal_surname, maternal_surname, birthdate, photo_url, entry_date, low_date, active, access_web, access_movil, role, place_user)
+        const { user_id, first_name, middle_name, paternal_surname, maternal_surname, birthdate, photo_url, entry_date, low_date, active, access_web, access_movil, role, theme_color, place_user } = object;
+        return new UserEntity(user_id, first_name, middle_name, paternal_surname, maternal_surname, birthdate, photo_url, entry_date, low_date, active, access_web, access_movil, role, theme_color, place_user)
 
     }
 

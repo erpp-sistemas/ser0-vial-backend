@@ -29,5 +29,8 @@ export class UserRepositoryImpl extends UserRepository {
     delete(user_id: number): Promise<UserEntity> {
         return this.datasource.delete(user_id);
     }
+    updateThemeColorByUserId(user_id: number, theme_color: string): Promise<string> {
+        return this.datasource.updateThemeColorByUserId(user_id, theme_color);
+    }
 
 }
