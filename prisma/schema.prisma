@@ -129,13 +129,12 @@ model user {
   access_web       Int?           @default(1, map: "DF__user__access_web__4F7CD00D") @db.SmallInt
   access_movil     Int?           @default(1, map: "DF__user__access_mov__5070F446") @db.SmallInt
   role_id          Int?
-  theme_color      String?        @db.VarChar(7)
+  theme_color      String?        @default("#2196F3", map: "DF__user__theme_colo__7C4F7684") @db.VarChar(7)
   access           access[]
   attendance       attendance[]
   place_user       place_user[]
   role             role?          @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__user__role_id__6C190EBB")
   user_contact     user_contact[]
-  
 }
 
 model user_contact {
@@ -150,4 +149,35 @@ model user_contact {
   email           String? @db.VarChar(100)
   user_id         Int?
   user            user?   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__user_cont__user___7A672E12")
+}
+
+model menu {
+  id_menu         Int       @id(map: "PK__menu__68A1D9DB84B33ABF") @default(autoincrement())
+  name            String?   @default("", map: "DF__menu__name__06CD04F7") @db.VarChar(255)
+  route           String?   @default("", map: "DF__menu__route__07C12930") @db.VarChar(255)
+  icon            String?   @default("DoNotDisturb", map: "DF__menu__icon__08B54D69") @db.VarChar(50)
+  id_menu_section Int?      @default(0, map: "DF__menu__id_menu_se__09A971A2")
+  parent_id       Int?      @default(0, map: "DF__menu__parent_id__0A9D95DB")
+  order           Int?      @default(0, map: "DF__menu__order__0B91BA14")
+  is_active       Boolean?  @default(false, map: "DF__menu__is_active__0C85DE4D")
+  created_at      DateTime? @default(now(), map: "DF__menu__created_at__0D7A0286") @db.DateTime
+}
+
+model menu_section {
+  id_menu_section Int       @id(map: "PK__menu_sec__0C1A376176B5BD4F") @default(autoincrement())
+  name            String?   @default("", map: "DF__menu_secti__name__7F2BE32F") @db.VarChar(255)
+  description     String?   @default("", map: "DF__menu_sect__descr__00200768") @db.VarChar(500)
+  icon            String?   @default("DoNotDisturb", map: "DF__menu_secti__icon__01142BA1") @db.VarChar(50)
+  order           Int?      @default(0, map: "DF__menu_sect__order__02084FDA")
+  is_active       Boolean?  @default(false, map: "DF__menu_sect__is_ac__02FC7413")
+  created_at      DateTime? @default(now(), map: "DF__menu_sect__creat__03F0984C") @db.DateTime
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model user_menu {
+  id_user_menu Int  @default(autoincrement())
+  user_id      Int?
+  id_menu      Int?
+
+  @@ignore
 }
