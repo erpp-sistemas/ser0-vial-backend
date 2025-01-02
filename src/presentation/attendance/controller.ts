@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AttendanceRepository } from "../../domain/repositories/attendance.repository";
-import { CreateAttendanceUseCase } from '../../domain/uses-cases'
+import { CreateAttendanceUseCase, GetAllAttendance } from '../../domain/uses-cases'
 import { AttendanceDto, CustomError } from "../../domain";
 
 
@@ -10,6 +10,12 @@ export class AttendanceController {
         private repository: AttendanceRepository
     ) { }
 
+
+    getAll = (req: Request, res: Response) => {
+        new GetAllAttendance(this.repository).execute()
+            .then(attendances => res.status(200).json(attendances))
+            .catch(error => res.status(400).json(error))
+    }
 
     createAttendance = (req: Request, res: Response) => {
         const [error, attendanceDto] = AttendanceDto.create(req.body);
