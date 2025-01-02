@@ -14,8 +14,10 @@ export class FormDatasourceImpl extends FormDatasource {
                             field: true, // Traer la información de los campos relacionados
                         },
                     },
+                    form_photo_form: { include: { photo_form: true } }
                 },
             });
+            console.log(forms)
             return forms.map(form => FormEntity.fromJson(form));
         } catch (error) {
             console.error(error);
