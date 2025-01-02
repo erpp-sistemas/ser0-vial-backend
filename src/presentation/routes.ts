@@ -3,6 +3,7 @@ import { AuthRoutes } from './auth/routes'
 import { UserRoutes } from './user/routes';
 import { MenuRoutes } from './menu/routes';
 import { AttendanceRoutes } from './attendance/routes';
+import { FormRoutes } from './form/routes';
 
 export class AppRoutes {
 
@@ -14,6 +15,7 @@ export class AppRoutes {
         router.use('/api/user', UserRoutes.routes)
         router.use('/api/menu', MenuRoutes.routes)
         router.use('/api/attendance', AttendanceRoutes.routes)
+        router.use('/api/form', FormRoutes.routes)  
 
         return router;
 
