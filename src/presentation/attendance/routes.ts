@@ -14,6 +14,7 @@ export class AttendanceRoutes {
         const repository = new AttendanceRepositoryImpl(datasource);
         const controller = new AttendanceController(repository);
 
+        router.get('/get-all', controller.getAll)
         router.post('/create-attendance', controller.createAttendance)
 
         return router;
