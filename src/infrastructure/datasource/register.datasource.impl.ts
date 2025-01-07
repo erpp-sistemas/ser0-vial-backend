@@ -1,9 +1,25 @@
 import { prisma } from "../../data/sqlserver";
-import { RegisterDto, CustomError } from "../../domain";
+import { RegisterDto, CustomError, InsertRegisterDto } from "../../domain";
 import { RegisterDatasource } from "../../domain/datasources/register.datasource";
 import { RegisterEntity } from "../../domain/entities/register.entity";
 
 export class RegisterDatasourceImpl implements RegisterDatasource {
+  
+  
+  async create(insertRegisterDto: InsertRegisterDto): Promise<RegisterEntity> {
+    try {
+      const { user_id, data_json, form_id, latitude, longitude, place_id, registration_date } = insertRegisterDto;
+      const new_register = await prisma.register_form_dynamic.create({
+        data: insertRegisterDto
+      })
+      return RegisterEntity.fromObject(new_register)
+    } catch (error) {
+      console.error(error);
+      throw CustomError.internalServer("Internal server error");
+    }
+  }
+
+
   async getByDates(registerDto: RegisterDto): Promise<RegisterEntity[]> {
     try {
       const { form_id, date_init, date_end } = registerDto;

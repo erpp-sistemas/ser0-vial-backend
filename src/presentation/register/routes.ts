@@ -13,6 +13,7 @@ export class RegisterRoutes {
     const registerController = new RegisterController(registerRepository);
 
     router.post("/get-by-dates", registerController.getByDates);
+    router.post("/create-register", registerController.createRegister)
 
     return router;
   }
