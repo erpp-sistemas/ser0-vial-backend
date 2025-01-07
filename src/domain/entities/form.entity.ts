@@ -13,6 +13,9 @@ export class FormEntity {
     ){}
 
     static fromJson(data: any): FormEntity {
+
+        //console.log(data)
+
         return new FormEntity(
             data.form_id,
             data.name,

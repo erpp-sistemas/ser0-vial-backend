@@ -9,6 +9,10 @@ export class FormRepositoryImpl extends FormRepository {
         private formDatasource: FormDatasource
     ) {super();}
 
+    getByPlace(place_id: number): Promise<FormEntity[]> {
+        return this.formDatasource.getByPlace(place_id);
+    }
+
     async getAll(): Promise<FormEntity[]> {
         return this.formDatasource.getAll();
     }

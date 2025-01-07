@@ -15,7 +15,8 @@ export class FormRoutes {
         const controller = new FormController(repository);
 
 
-        router.get('/get-all', controller.GetAllForms);
+        router.get('/get-all', controller.getAllForms);
+        router.get('/get-by-place/:place_id', controller.getFormsByPlace)
 
         return router;
 
