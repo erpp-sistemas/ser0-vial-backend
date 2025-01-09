@@ -22,13 +22,14 @@ export class RegisterDatasourceImpl implements RegisterDatasource {
 
   async getByDates(registerDto: RegisterDto): Promise<RegisterEntity[]> {
     try {
-      const { form_id, date_init, date_end } = registerDto;
+      const { place_id, form_id, date_init, date_end } = registerDto;
       const startDate = new Date(date_init).toISOString();
       const endDate = new Date(date_end).toISOString();
 
       const registers: any[] = await prisma.register_form_dynamic.findMany({
         where: {
           form_id: form_id,
+          place_id: place_id,
           registration_date: {
             gte: startDate, // Fecha inicial (>=)
             lte: endDate, // Fecha final (<=)

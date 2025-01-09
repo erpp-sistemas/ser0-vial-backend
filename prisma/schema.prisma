@@ -134,6 +134,14 @@ model place {
   register_form_dynamic register_form_dynamic[]
 }
 
+model place_form {
+  id       Int    @id(map: "PK__place_fo__3213E83F6EF0F5F1") @default(autoincrement())
+  place_id Int?
+  form_id  Int?
+  form     form?  @relation(fields: [form_id], references: [form_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_form_place")
+  place    place? @relation(fields: [place_id], references: [place_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_place_form")
+}
+
 model place_user {
   id        Int       @id(map: "PK__place_us__3213E83F593454BF") @default(autoincrement())
   user_id   Int?
@@ -254,12 +262,4 @@ model vacation {
   date_end     DateTime? @db.Date
   url_document String?   @db.VarChar(255)
   user         user?     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_vacation")
-}
-
-model place_form {
-  id       Int    @id(map: "PK__place_fo__3213E83F6EF0F5F1") @default(autoincrement())
-  place_id Int?
-  form_id  Int?
-  form     form?  @relation(fields: [form_id], references: [form_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_form_place")
-  place    place? @relation(fields: [place_id], references: [place_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_place_form")
 }
