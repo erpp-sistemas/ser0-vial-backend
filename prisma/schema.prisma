@@ -132,6 +132,7 @@ model place {
   place_form            place_form[]
   place_user            place_user[]
   register_form_dynamic register_form_dynamic[]
+  register_photo        register_photo[]
 }
 
 model place_form {
@@ -154,17 +155,33 @@ model place_user {
 }
 
 model register_form_dynamic {
-  id                Int       @id(map: "PK__register__3213E83FF9413999") @default(autoincrement())
+  custom_id         String           @id(map: "PK__register__8664B23AFB98AFB7") @db.VarChar(100)
   place_id          Int?
-  data_json         String?   @db.VarChar(Max)
-  registration_date DateTime? @default(now(), map: "DF__register___regis__5BE2A6F2") @db.DateTime
+  data_json         String?          @db.VarChar(Max)
+  registration_date DateTime?        @db.DateTime
   form_id           Int?
-  latitude          Decimal?  @db.Decimal(19, 6)
-  longitude         Decimal?  @db.Decimal(19, 6)
+  latitude          Decimal?         @db.Decimal(19, 6)
+  longitude         Decimal?         @db.Decimal(19, 6)
   user_id           Int?
-  place             place?    @relation(fields: [place_id], references: [place_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__register___place__6FE99F9F")
-  form              form?     @relation(fields: [form_id], references: [form_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_form_register")
-  user              user?     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_register")
+  form              form?            @relation(fields: [form_id], references: [form_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_register_form")
+  place             place?           @relation(fields: [place_id], references: [place_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_register_place")
+  user              user?            @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_register_user")
+  register_photo    register_photo[]
+}
+
+model register_photo {
+  id                    Int                   @id(map: "PK__register__3213E83F1AA22DCE") @default(autoincrement())
+  custom_id             String                @db.VarChar(100)
+  place_id              Int?
+  user_id               Int?
+  photo_name            String?               @db.NVarChar(100)
+  type                  String?               @db.VarChar(100)
+  photo_url             String?               @db.NVarChar(255)
+  fecha                 DateTime?             @db.DateTime
+  fecha_sync            DateTime?             @default(now(), map: "DF__register___fecha__5224328E") @db.DateTime
+  place                 place?                @relation(fields: [place_id], references: [place_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_photo_place")
+  register_form_dynamic register_form_dynamic @relation(fields: [custom_id], references: [custom_id], onUpdate: NoAction, map: "fk_photo_register")
+  user                  user?                 @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_photo_user")
 }
 
 model role {
@@ -225,6 +242,7 @@ model user {
   permission_attendance permission_attendance[]
   place_user            place_user[]
   register_form_dynamic register_form_dynamic[]
+  register_photo        register_photo[]
   route_user            route_user[]
   role                  role?                   @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__user__role_id__6C190EBB")
   schedule              schedule?               @relation(fields: [schedule_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_schedule")

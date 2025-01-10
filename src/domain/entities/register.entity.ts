@@ -10,7 +10,8 @@ export class RegisterEntity {
     public form_id: number,
     public latitude: number,
     public longitude: number,
-    public user_id: number
+    public user_id: number,
+    public custom_id: string
   ) {}
 
   /**
@@ -26,6 +27,7 @@ export class RegisterEntity {
       latitude,
       longitude,
       user_id,
+      custom_id
     } = object;
 
     // Validaciones
@@ -40,7 +42,8 @@ export class RegisterEntity {
       form_id,
       latitude,
       longitude,
-      user_id
+      user_id,
+      custom_id
     );
   }
 }

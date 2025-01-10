@@ -8,7 +8,6 @@ export class RegisterDatasourceImpl implements RegisterDatasource {
   
   async create(insertRegisterDto: InsertRegisterDto): Promise<RegisterEntity> {
     try {
-      const { user_id, data_json, form_id, latitude, longitude, place_id, registration_date } = insertRegisterDto;
       const new_register = await prisma.register_form_dynamic.create({
         data: insertRegisterDto
       })
