@@ -6,6 +6,7 @@ import { AttendanceRoutes } from './attendance/routes';
 import { FormRoutes } from './form/routes';
 import { RegisterRoutes } from './register/routes';
 import { PhotoRoutes } from './photo/routes';
+import { RouteUserRoutes } from './route-user/routes';
 
 export class AppRoutes {
 
@@ -20,6 +21,7 @@ export class AppRoutes {
         router.use('/api/form', FormRoutes.routes)
         router.use('/api/register', RegisterRoutes.routes)
         router.use('/api/photo', PhotoRoutes.routes)
+        router.use('/api/routes', RouteUserRoutes.routes)
 
         return router;
 
