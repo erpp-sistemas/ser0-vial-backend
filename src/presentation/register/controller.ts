@@ -20,7 +20,8 @@ export class RegisterController {
 
   createRegister = (req: Request, res: Response) => {
     const [error, inserRegistertDto] = InsertRegisterDto.create(req.body);
-    if (error) return res.status(400).json({ error })
+    if (error) return res.status(400).json({ error });
+
 
     new CreateRegister(this.registerRepository).execute(inserRegistertDto!)
       .then(new_register => res.status(200).json(new_register))
