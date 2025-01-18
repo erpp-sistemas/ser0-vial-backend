@@ -244,6 +244,7 @@ model user {
   register_form_dynamic register_form_dynamic[]
   register_photo        register_photo[]
   route_user            route_user[]
+  stack_user            stack_user[]
   role                  role?                   @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__user__role_id__6C190EBB")
   schedule              schedule?               @relation(fields: [schedule_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_schedule")
   user_contact          user_contact[]
@@ -280,4 +281,14 @@ model vacation {
   date_end     DateTime? @db.Date
   url_document String?   @db.VarChar(255)
   user         user?     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_vacation")
+}
+
+model stack_user {
+  id         Int       @id(map: "PK__stack_us__3213E83F0E9AFBAD") @default(autoincrement())
+  user_id    Int?
+  percentage Int?
+  created_at DateTime? @db.DateTime
+  latitude   Decimal?  @db.Decimal(19, 6)
+  longitude  Decimal?  @db.Decimal(19, 6)
+  user       user?     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_stak_user")
 }
