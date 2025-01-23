@@ -123,16 +123,17 @@ model photo_form {
 }
 
 model place {
-  place_id              Int                     @id(map: "PK__place__BF2B684A21206436") @default(autoincrement())
-  name                  String?                 @db.VarChar(100)
-  logo                  String?                 @db.VarChar(255)
-  latitude              Decimal?                @db.Decimal(19, 6)
-  longitude             Decimal?                @db.Decimal(19, 6)
-  active                Int?                    @default(1, map: "DF__place__active__47DBAE45") @db.SmallInt
-  place_form            place_form[]
-  place_user            place_user[]
-  register_form_dynamic register_form_dynamic[]
-  register_photo        register_photo[]
+  place_id                    Int                           @id(map: "PK__place__BF2B684A21206436") @default(autoincrement())
+  name                        String?                       @db.VarChar(100)
+  logo                        String?                       @db.VarChar(255)
+  latitude                    Decimal?                      @db.Decimal(19, 6)
+  longitude                   Decimal?                      @db.Decimal(19, 6)
+  active                      Int?                          @default(1, map: "DF__place__active__47DBAE45") @db.SmallInt
+  place_form                  place_form[]
+  place_service_layer_designe place_service_layer_designe[]
+  place_user                  place_user[]
+  register_form_dynamic       register_form_dynamic[]
+  register_photo              register_photo[]
 }
 
 model place_form {
@@ -291,4 +292,48 @@ model stack_user {
   latitude   Decimal?  @db.Decimal(19, 6)
   longitude  Decimal?  @db.Decimal(19, 6)
   user       user?     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_stak_user")
+}
+
+model designe_layer {
+  id                          Int                           @id(map: "PK__designe___3213E83FDF6EDEAC") @default(autoincrement())
+  color                       String?                       @db.NVarChar(10)
+  visibility                  String?                       @db.VarChar(10)
+  type                        String?                       @db.VarChar(100)
+  opacity                     Decimal?                      @default(1, map: "DF__designe_l__opaci__6DCC4D03") @db.Decimal(18, 0)
+  created_at                  DateTime?                     @default(now(), map: "DF__designe_l__creat__6EC0713C") @db.DateTime
+  place_service_layer_designe place_service_layer_designe[]
+}
+
+model layer {
+  layer_id                    Int                           @id(map: "PK__layer__5CDE769CC052D831") @default(autoincrement())
+  name_layer                  String?                       @db.VarChar(100)
+  created_at                  DateTime?                     @default(now(), map: "DF__layer__created_a__6442E2C9") @db.DateTime
+  cluster                     Int?                          @default(0, map: "DF__layer__cluster__65370702")
+  is_stored                   Int?                          @default(0, map: "DF__layer__is_stored__662B2B3B")
+  place_service_layer_designe place_service_layer_designe[]
+}
+
+model place_service_layer_designe {
+  id            Int           @id(map: "PK__place_se__3213E83F454F89A4") @default(autoincrement())
+  place_id      Int
+  service_id    Int
+  layer_id      Int
+  designe       Int
+  url_geoserver String?       @db.NVarChar(Max)
+  is_large      Int?          @default(0, map: "DF__place_ser__is_la__793DFFAF")
+  created_at    DateTime?     @default(now(), map: "DF__place_ser__creat__7A3223E8") @db.DateTime
+  designe_layer designe_layer @relation(fields: [designe], references: [id], onUpdate: NoAction, map: "fk_psld_designe")
+  layer         layer         @relation(fields: [layer_id], references: [layer_id], onUpdate: NoAction, map: "fk_psld_layer")
+  place         place         @relation(fields: [place_id], references: [place_id], onUpdate: NoAction, map: "fk_psld_place")
+  service_map   service_map   @relation(fields: [service_id], references: [service_id], onUpdate: NoAction, map: "fk_psld_service")
+}
+
+model service_map {
+  service_id                  Int                           @id(map: "PK__service___3E0DB8AF8FBC566A") @default(autoincrement())
+  name_service                String?                       @db.VarChar(100)
+  icon_service                String?                       @db.VarChar(100)
+  order                       Int?
+  default_active              Int?                          @default(0, map: "DF__service_m__defau__607251E5")
+  created_at                  DateTime?                     @default(now(), map: "DF__service_m__creat__6166761E") @db.DateTime
+  place_service_layer_designe place_service_layer_designe[]
 }

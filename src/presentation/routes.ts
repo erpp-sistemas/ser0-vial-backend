@@ -8,6 +8,8 @@ import { RegisterRoutes } from './register/routes';
 import { PhotoRoutes } from './photo/routes';
 import { RouteUserRoutes } from './route-user/routes';
 import { StackUserRoutes } from './stack-user/stack-user.route';
+import { ServiceMapRoutes } from './service-map/routes';
+import { LayerRoutes } from './layer/routes';
 
 export class AppRoutes {
 
@@ -24,6 +26,8 @@ export class AppRoutes {
         router.use('/api/photo', PhotoRoutes.routes)
         router.use('/api/routes', RouteUserRoutes.routes)
         router.use('/api/stack', StackUserRoutes.routes)
+        router.use('/api/service-map', ServiceMapRoutes.routes)
+        router.use('/api/layer', LayerRoutes.routes)
 
         return router;
 
