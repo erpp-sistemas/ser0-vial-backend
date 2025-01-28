@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL_POSTGRES")
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model register_form_dynamic {
+  custom_id         String                    @db.VarChar(100)
+  place_id          Int?
+  data_json         Json?
+  registration_date DateTime?                 @db.Timestamp(6)
+  form_id           Int?
+  latitude          Decimal?                  @db.Decimal(19, 6)
+  longitude         Decimal?                  @db.Decimal(19, 6)
+  user_id           Int?
+  geom              Unsupported("geography")?
+
+  @@ignore
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
